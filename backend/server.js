@@ -1,4 +1,3 @@
-
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
@@ -34,18 +33,18 @@ app.get("/", (req, res) => {
 /* AI Route */
 app.post("/api/ask-ai", async (req, res) => {
   try {
-    // ✅ Validate input
+    // Validate input
     if (!req.body || !req.body.prompt) {
       return res.status(400).json({ error: "Prompt is required" });
     }
 
     const { prompt } = req.body;
 
-    // ✅ Call OpenRouter API
-    const response = await axios.post(
+    // Call OpenRouter API
+    const apiResponse = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
-        model: "openai/gpt-3.5-turbo", // ✅ stable model
+        model: "openai/gpt-3.5-turbo",
         messages: [{ role: "user", content: prompt }]
       },
       {
@@ -56,9 +55,9 @@ app.post("/api/ask-ai", async (req, res) => {
       }
     );
 
-    const answer = response.data.choices[0].message.content;
+    const answer = apiResponse.data.choices[0].message.content;
 
-    // ✅ Save to MongoDB
+    // Save to MongoDB
     const newChat = new Chat({
       prompt: prompt,
       response: answer
@@ -66,16 +65,20 @@ app.post("/api/ask-ai", async (req, res) => {
 
     await newChat.save();
 
-    // ✅ Send response
-    res.json({ answer });
+    // ✅ FIXED RESPONSE KEY
+    res.json({ response: answer });
 
   } catch (error) {
     console.error("🔥 FULL ERROR:", error.response?.data || error.message);
-    res.status(500).json({ error: "Error fetching AI" });
+
+    res.status(500).json({
+      error: "Error fetching AI",
+      details: error.response?.data || error.message
+    });
   }
 });
 
-/* Save Route (optional separate save) */
+/* Save Route (optional) */
 app.post("/api/save", async (req, res) => {
   try {
     const { prompt, response } = req.body;
@@ -91,5 +94,8 @@ app.post("/api/save", async (req, res) => {
 });
 
 /* Start Server */
-const PORT = 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
