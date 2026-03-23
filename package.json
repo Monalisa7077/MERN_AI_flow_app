@@ -1,0 +1,23 @@
+{
+  "name": "mern_ai_flow_app",
+  "version": "1.0.0",
+  "description": "simple AI flow web app using MERN+ReactFlow",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd backend && node server.js\" \"cd frontend && npm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Monalisa7077/MERN_AI_flow_app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Monalisa7077/MERN_AI_flow_app/issues"
+  },
+  "homepage": "https://github.com/Monalisa7077/MERN_AI_flow_app#readme",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
