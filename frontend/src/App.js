@@ -205,7 +205,7 @@ function App() {
       setOutput("");
 
       const res = await axios.post(
-        "https://mern-ai-flow-app.onrender.com",
+        "https://mern-ai-flow-app-1.onrender.com",
         {
           prompt: input,
         }
