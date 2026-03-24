@@ -1,5 +1,11 @@
 # MERN AI Flow App
 
+### Backend Deployed URL using Render ###
+https://mern-ai-flow-app-2.onrender.com/
+
+## Application URL deployed using Vercel ###
+https://mern-ai-flow-app-frontend.vercel.app/
+
 ## 📌 Project Overview
 This is a simple AI-powered flow application built using the MERN stack and React Flow.  
 Users can enter a prompt, execute the flow, view the AI-generated response, and save the data to MongoDB.
