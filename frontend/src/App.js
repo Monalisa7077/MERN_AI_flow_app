@@ -1,121 +1,3 @@
-// import React, { useState } from "react";
-// import ReactFlow from "reactflow";
-// import "reactflow/dist/style.css";
-// import axios from "axios";
-
-// function App() {
-//   const [input, setInput] = useState("");
-//   const [output, setOutput] = useState("AI response will appear here...");
-//   const [loading, setLoading] = useState(false);
-
-//   const nodes = [
-//     {
-//       id: "1",
-//       data: {
-//         label: (
-//           <textarea
-//             placeholder="Enter your prompt..."
-//             value={input}
-//             onChange={(e) => setInput(e.target.value)}
-//             style={{ width: "200px", height: "80px" }}
-//           />
-//         ),
-//       },
-//       position: { x: 100, y: 150 },
-//     },
-//     {
-//       id: "2",
-//       data: {
-//         label: (
-//           <div style={{ width: "220px", minHeight: "80px" }}>
-//             {loading ? "⏳ Loading..." : output}
-//           </div>
-//         ),
-//       },
-//       position: { x: 450, y: 150 },
-//     },
-//   ];
-
-//   const edges = [
-//     {
-//       id: "e1-2",
-//       source: "1",
-//       target: "2",
-//       animated: true,
-//     },
-//   ];
-
-//   // 🔥 RUN FLOW
-//   const runFlow = async () => {
-//     if (!input) {
-//       setOutput("⚠️ Please enter a prompt");
-//       return;
-//     }
-
-//     try {
-//       setLoading(true);
-//       setOutput("");
-
-//       const res = await axios.post(
-//         "http://127.0.0.1:5000/api/ask-ai",
-//         {
-//           prompt: input,
-//         }
-//       );
-
-//       setOutput(res.data.answer || "No response from AI");
-//     } catch (error) {
-//       console.error("Error:", error);
-//       setOutput("❌ Cannot connect to backend. Check server.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // 💾 SAVE DATA
-//   const saveData = async () => {
-//     if (!output || output.includes("❌")) {
-//       alert("Nothing valid to save");
-//       return;
-//     }
-
-//     try {
-//       await axios.post("http://127.0.0.1:5000/api/save", {
-//         prompt: input,
-//         response: output,
-//       });
-
-//       alert("✅ Saved to MongoDB");
-//     } catch (error) {
-//       console.error(error);
-//       alert("❌ Save failed");
-//     }
-//   };
-
-//   return (
-//     <div style={{ height: "100vh", padding: "20px" }}>
-//       <h2>MERN AI Flow App</h2>
-
-//       <button onClick={runFlow} style={{ marginRight: "10px" }}>
-//         Run Flow
-//       </button>
-
-//       <button onClick={saveData}>Save</button>
-
-//       <div style={{ height: "80%", marginTop: "20px" }}>
-//         <ReactFlow nodes={nodes} edges={edges} />
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default App;
-    
-
-
-
-
-
 import React, { useState } from "react";
 import ReactFlow from "reactflow";
 import "reactflow/dist/style.css";
@@ -204,14 +86,16 @@ function App() {
       setLoading(true);
       setOutput("");
 
+      // ✅ FIX 1: Correct API endpoint
       const res = await axios.post(
-        "https://mern-ai-flow-app-2.onrender.com/",
+        "https://mern-ai-flow-app-2.onrender.com/api/ask-ai",
         {
           prompt: input,
         }
       );
 
-      setOutput(res.data.answer || "No response from AI");
+      // ✅ FIX 2: Correct response key
+      setOutput(res.data.response || "No response from AI");
     } catch (error) {
       console.error("Error:", error);
       setOutput("❌ Cannot connect to backend. Check server.");
@@ -221,16 +105,24 @@ function App() {
   };
 
   const saveData = async () => {
-    if (!output || output.includes("❌") || output === "AI response will appear here...") {
+    if (
+      !output ||
+      output.includes("❌") ||
+      output === "AI response will appear here..."
+    ) {
       alert("Nothing valid to save");
       return;
     }
 
     try {
-      await axios.post("http://127.0.0.1:5000/api/save", {
-        prompt: input,
-        response: output,
-      });
+      // ✅ FIX 3: Removed localhost
+      await axios.post(
+        "https://mern-ai-flow-app-2.onrender.com/api/save",
+        {
+          prompt: input,
+          response: output,
+        }
+      );
 
       alert("✅ Saved to MongoDB");
     } catch (error) {
